@@ -3,11 +3,11 @@ PODS:
     - AliVCSDK_InteractiveLive/Default (= 7.0.0)
   - AliVCSDK_InteractiveLive/Default (7.0.0)
   - Flutter (1.0.0)
-  - flutter_aliplayer (7.0.0):
+  - flutter_aliplayer (7.4.0):
     - Flutter
-    - flutter_aliplayer/AliVCSDKFrameworks (= 7.0.0)
+    - flutter_aliplayer/AliVCSDKFrameworks (= 7.4.0)
     - MJExtension
-  - flutter_aliplayer/AliVCSDKFrameworks (7.0.0):
+  - flutter_aliplayer/AliVCSDKFrameworks (7.4.0):
     - AliVCSDK_InteractiveLive (= 7.0.0)
     - Flutter
     - MJExtension
@@ -37,7 +37,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AliVCSDK_InteractiveLive: f1e4962ab05b3d88bfd46b2ce2760e8b98e8bd81
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_aliplayer: 44a58cc10b33144aa5c111fa7342c9b8f116fdee
+  flutter_aliplayer: d3ba64352af3fc7ed780af092a1b3346b8e4b57a
   flutter_livepush_plugin: b33bace43a0102f8feac20544ebf78c6754696f9
   MJExtension: e97d164cb411aa9795cf576093a1fa208b4a8dd8
 

@@ -1,32 +1,34 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
-
 import 'package:flutter_livepush_plugin/base/live_base.dart';
-
+import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web_socket_channel/status.dart' as status;
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -36,18 +38,41 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  late var channel;
 
   @override
-  void initState()  {
+  void initState() {
     super.initState();
     init();
+    test3();
+  }
+
+  test3() async {
+    final wsUrl = Uri.parse('wss://echo.websocket.org');
+    channel = WebSocketChannel.connect(wsUrl);
+    await channel.ready;
+    print('44444444');
+    channel.stream.listen((message) {
+      print('received $message');
+      // channel.sink.add('received!');
+      // channel.sink.close(status.goingAway);
+    });
+
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      repeatSet();
+    });
+  }
+
+  void repeatSet() {
+    print('333333');
+    channel.sink.add('received!');
   }
 
   void init() async {
-    AlivcLiveBase.registerSDK();
+    // AlivcLiveBase.registerSDK();
 
-    FlutterAliplayer fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
-    fAliplayer.setOnPrepared((playerId) {});
+    // FlutterAliplayer fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
+    // fAliplayer.setOnPrepared((playerId) {});
 
     // /// 2.设置监听回调接口
     // AlivcLiveBase.setListener(AlivcLiveBaseListener(
@@ -76,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // /// 设置日志路径及日志分片大小
     // AlivcLiveBase.setLogPath(saveLogDir, saveLogMaxPartFileSizeInKB);
 
-    print('7777777');
+    // print('7777777');
   }
 
   void _incrementCounter() {
