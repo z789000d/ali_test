@@ -1,0 +1,46 @@
+PODS:
+  - AliVCSDK_InteractiveLive (7.0.0):
+    - AliVCSDK_InteractiveLive/Default (= 7.0.0)
+  - AliVCSDK_InteractiveLive/Default (7.0.0)
+  - Flutter (1.0.0)
+  - flutter_aliplayer (7.0.0):
+    - Flutter
+    - flutter_aliplayer/AliVCSDKFrameworks (= 7.0.0)
+    - MJExtension
+  - flutter_aliplayer/AliVCSDKFrameworks (7.0.0):
+    - AliVCSDK_InteractiveLive (= 7.0.0)
+    - Flutter
+    - MJExtension
+  - flutter_livepush_plugin (7.0.0):
+    - AliVCSDK_InteractiveLive (= 7.0.0)
+    - Flutter
+  - MJExtension (3.4.2)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - flutter_aliplayer (from `.symlinks/plugins/flutter_aliplayer/ios`)
+  - flutter_livepush_plugin (from `.symlinks/plugins/flutter_livepush_plugin/ios`)
+
+SPEC REPOS:
+  trunk:
+    - AliVCSDK_InteractiveLive
+    - MJExtension
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  flutter_aliplayer:
+    :path: ".symlinks/plugins/flutter_aliplayer/ios"
+  flutter_livepush_plugin:
+    :path: ".symlinks/plugins/flutter_livepush_plugin/ios"
+
+SPEC CHECKSUMS:
+  AliVCSDK_InteractiveLive: f1e4962ab05b3d88bfd46b2ce2760e8b98e8bd81
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  flutter_aliplayer: 44a58cc10b33144aa5c111fa7342c9b8f116fdee
+  flutter_livepush_plugin: b33bace43a0102f8feac20544ebf78c6754696f9
+  MJExtension: e97d164cb411aa9795cf576093a1fa208b4a8dd8
+
+PODFILE CHECKSUM: b9bcb6525c5816f34e86057fb40d4c42ff98b574
+
+COCOAPODS: 1.16.2
