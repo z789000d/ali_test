@@ -1,0 +1,21 @@
+# Rules to keep classes required by AliCloud SDKs
+-keep class com.aliyun.aio.keep.** { *; }
+-keep class com.aliyun.common.AlivcNativeLoader { *; }
+-keep class com.aliyun.aio_stat.ParamGetter { *; }
+
+# The rules you copied from missing_rules.txt should be here.
+# It might look like this:
+-keep class com.aliyun.aio.keep.API
+-keep class com.aliyun.aio.keep.CalledByNative
+-keep class com.aliyun.common.AlivcNativeLoader { java.lang.String getNativePath(); }
+# ... and so on for the other missing classes
+
+# General rules for AliCloud SDKs (from a previous fix)
+-keep class com.aliyun.** { *; }
+-keep class com.alivc.** { *; }
+-keep class com.taobao.** { *; }
+
+# Please add these rules to your existing keep rules in order to suppress warnings.
+# This is generated automatically by the Android Gradle plugin.
+-dontwarn com.aliyun.aio.keep.API
+-dontwarn com.aliyun.aio.keep.CalledByNative

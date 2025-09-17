@@ -34,7 +34,7 @@ dependencies:
   flutter_livepush_plugin: ^7.0.0
   web_socket_channel: ^3.0.3
   get: ^4.7.2
-
+  smooth_sheets: ^0.15.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
