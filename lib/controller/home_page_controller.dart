@@ -1,43 +1,80 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_aliplayer/flutter_aliplayer.dart';
+import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:get/get.dart';
+import 'package:sdpify/sdpify.dart';
 import 'package:smooth_sheets/smooth_sheets.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class HomePageController extends GetxController {
   late var channel;
-  var socketText = <String>[
-  ].obs;
+  var socketText = <String>[].obs;
   var isInitText = false;
   final scrollController = ScrollController();
   var isTouching = false;
   final SheetController sheetController = SheetController();
-  final isListViewScrollable = false.obs;
+  final isListViewScrollable = true.obs;
+  FlutterAliplayer? fAliplayer;
+  Timer? time;
 
   @override
   void onInit() {
     super.onInit();
     init();
-    startWebSocket();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      scrollController.jumpTo(scrollController.position.maxScrollExtent);
-    });
-    ever(socketText, (_) {
-      // 確保滾動在 UI 渲染完成後執行
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        // 使用 jumpTo() 方法，滾動到最大可滾動範圍
-        if (scrollController.hasClients) {
-          scrollController.jumpTo(scrollController.position.maxScrollExtent);
-        }
-      });
-    });
+    _setLandscape();
+    _startWebSocket();
+    _listenSocketTextJumpToBottom();
+    _sheetControllerListener();
+    // _initPlayer();
+    // start();
+  }
 
+  void _setLandscape() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+  }
+
+  void _setAllOrientations() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+  }
+
+  void _sheetControllerListener() {
     sheetController.addListener(() {
       final double currentOffset = sheetController.value ?? 0.0;
       // print('bbbbb ${SheetOffset.absolute(currentOffset)}');
     });
+  }
+
+  void _listenSocketTextJumpToBottom() {
+    ever(socketText, (_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        print(
+            'size ${scrollController.offset} ${scrollController.position.minScrollExtent}');
+
+        if (scrollController.offset >
+            scrollController.position.minScrollExtent + 200.sdp) {
+          return;
+        }
+
+        if (scrollController.hasClients) {
+          scrollController.jumpTo(scrollController.position.minScrollExtent);
+        }
+      });
+    });
+  }
+
+  void start() async {
+    await fAliplayer?.prepare();
+    await fAliplayer?.play();
   }
 
   void down() {
@@ -53,10 +90,12 @@ class HomePageController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    channel.sink.close(status.goingAway);
+    channel.sink.close(status.normalClosure);
+    _setAllOrientations();
+    time?.cancel();
   }
 
-  void startWebSocket() async {
+  void _startWebSocket() async {
     final wsUrl = Uri.parse('wss://echo.websocket.org');
     channel = WebSocketChannel.connect(wsUrl);
     await channel.ready;
@@ -69,22 +108,38 @@ class HomePageController extends GetxController {
         return;
       }
       socketText.add(message);
+      socketText.value = socketText.reversed.toList();
     });
 
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      repeatSet();
+    time = Timer.periodic(const Duration(seconds: 1), (timer) {
+      _repeatSet();
     });
   }
 
-  void repeatSet() {
+  void _repeatSet() {
     DateTime now = DateTime.now();
     channel.sink.add('$now');
+  }
+
+  void _initPlayer() {
+    fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
+  }
+
+  void onViewPlayerCreated(viewId) async {
+    ///将 渲染 View 设置给播放器
+    fAliplayer?.setPlayerView(viewId);
+    //设置播放源
+    FlutterAliplayer.createVidPlayerConfigGenerator();
+    // 设置预览时间
+
+    String playConfig = await FlutterAliplayer.generatePlayerConfig();
+
+    // fAliplayer?.setUrl(_dataSourceMap[DataSourceRelated.URL_KEY]);
   }
 
   void init() async {
     // AlivcLiveBase.registerSDK();
 
-    // FlutterAliplayer fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
     // fAliplayer.setOnPrepared((playerId) {});
 
     // /// 2.设置监听回调接口
